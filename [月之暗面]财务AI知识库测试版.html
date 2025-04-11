@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财务知识库智能助手</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --bg-color: #ffffff;
+            --text-color: #333;
+            --card-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #6c8ef8;
+            --bg-color: #0a0e1a;
+            --text-color: #e0e0e0;
+            --card-bg: #1a1f2d;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+            transition: var(--transition);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 动态网格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(var(--primary-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--primary-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.05;
+            z-index: -1;
+            animation: gridMove 60s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(-30px,30px); }
+        }
+
+        /* 主题切换按钮 */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(45deg, #1a73e8, #6c8ef8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .knowledge-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .knowledge-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(108,142,248,0.1), 
+                transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 鼠标跟随效果 */
+        .cursor-effect {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: 
+                width 0.3s ease,
+                height 0.3s ease,
+                opacity 0.3s ease;
+            z-index: 999;
+        }
+
+        /* 其他原有样式修改... */
+        /* 注意将所有颜色值替换为CSS变量 */
+    </style>
+</head>
+<body>
+    <!-- 主题切换按钮 -->
+    <div class="theme-switch" onclick="toggleTheme()">
+        <span class="theme-icon">🌓</span>
+    </div>
+
+    <!-- 鼠标跟随元素 -->
+    <div class="cursor-effect"></div>
+
+    <!-- 原有内容保持不变... -->
+
+    <script>
+        // 主题切换功能
+        function toggleTheme() {
+            const body = document.body;
+            body.style.transition = 'none'; // 禁用过渡避免闪烁
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? '' : 'dark');
+            
+            // 保存用户偏好
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            
+            // 更新按钮图标
+            document.querySelector('.theme-icon').textContent = isDark ? '🌞' : '🌙';
+        }
+
+        // 鼠标跟随效果
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor-effect');
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+            
+            // 在可交互元素上放大光标
+            const target = e.target;
+            if (target.closest('button, a, .knowledge-record')) {
+                cursor.style.width = '30px';
+                cursor.style.height = '30px';
+                cursor.style.opacity = '0.8';
+            } else {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.opacity = '0.5';
+            }
+        });
+
+        // 初始化主题
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme === 'dark' ? 'dark' : '');
+            document.querySelector('.theme-icon').textContent = savedTheme === 'dark' ? '🌙' : '🌞';
+        }
+        initTheme();
+
+       
+    </script>
+    </style>
+</head>
+<body>
+    <h1>财务知识库智能助手</h1>
+    
+    <div class="instructions">
+        <h3>使用说明：</h3>
+        <p>本助手已集成以下财务知识模块，您可以直接在<strong class="highlight-red">右下角聊天窗口</strong>咨询相关问题。</p>
+        <p class="chat-hint"><strong class="highlight-red">※ 点击右下角章鱼图标打开会话窗口进行咨询 ※</strong></p>
+    </div>
+    
+     <div class="knowledge-container">
+        <h2 class="knowledge-title">知识库更新记录</h2>
+        <div class="knowledge-timeline">
+            <div class="knowledge-record">
+                <div class="record-date">2025年4月第二次更新</div>
+                <div class="record-content">总账类FAQ</div>
+                <div class="record-content">资金结算操作FAQ</div>
+                <div class="record-content">业务招待费报销FAQ</div>
+                <div class="record-content">商务宴请集团制度</div>
+                <div class="record-content">人员差旅标准集团制度</div>
+            </div> <div class="knowledge-record">
+                <div class="record-date">2025年4月</div>
+                <div class="record-content">经办人填单模块 FAQ</div>
+                <div class="record-content">本地会计岗人员模块 FAQ</div>
+                <div class="record-content">本地资金岗人员模块 FAQ</div>
+                <div class="record-content">财务共享中心会计凭证 FAQ</div>
+                <div class="record-content">财务共享中心流水认领 FAQ</div>
+            </div>
+            <div class="knowledge-record">
+                <div class="record-date">2025年2月</div>
+                <div class="record-content">冲销借款或者预付款 FAQ</div>
+                <div class="record-content">智能稽核及智能审核 FAQ</div>
+                <div class="record-content">业务招待费报销业务 FAQ</div>
+                <div class="record-content">出差申请变更 FAQ</div>
+                <div class="record-content">费控板块单据查询 FAQ</div>
+                <div class="record-content">财务共享费控共享 FAQ</div>
+                            </div>
+            <div class="knowledge-record">
+                <div class="record-date">2024年11月</div>
+                <div class="record-content">费控板块常见 FAQ(持续维护)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载 SDK -->
+    <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.3/libs/cn/index.js"></script>
+
+    <script>
+        let cozeWebSDK;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            cozeWebSDK = new CozeWebSDK.WebChatClient({
+                config: {
+                    type: 'bot',
+                     bot_id: '7446466446168883238',
+                    isIframe: false,
+                },
+                auth: {
+                    type: 'token',
+                    token: 'pat_c97Uyt4bCIXwpvR9h3dFLZ1vIoCl7AltPtezKPgGiiciedmBBPMzJhusSP1ei491',
+                    onRefreshToken: async () => {
+                        const newToken = await fetchNewToken();
+                        return newToken;
+                    },
+                },
+                style: {
+                    position: 'right',
+                    width: '400px',
+                    height: '600px',
+                    headerBackground: '#1a73e8',
+                    headerColor: '#ffffff',
+                },
+            });
+
+            // 监听事件
+            cozeWebSDK.on('message_sent', (message) => {
+                console.log('用户发送:', message);
+            });
+            cozeWebSDK.on('message_received', (message) => {
+                console.log('收到回复:', message);
+            });
+
+            // 模拟获取新token
+            async function fetchNewToken() {
+                console.log('正在刷新token...');
+                return '新token_' + Math.random().toString(36).slice(2, 10);
+            }
+        });
+
+        // 点击FAQ项触发的问题询问函数
+        function askQuestion(question) {
+            if (!cozeWebSDK) {
+                console.error('聊天SDK尚未初始化');
+                return;
+            }
+            
+            // 打开聊天窗口
+            cozeWebSDK.open();
+            
+            // 延迟发送消息，确保窗口已打开
+            setTimeout(() => {
+                cozeWebSDK.sendMessage(question);
+            }, 500);
+        }
+    </script>
+     <div class="footer">
+        <p>© 2025 成都兴城财务知识智能助手 | 作者：张潇</p>
+    </div>
+</body>
+
+</html>
