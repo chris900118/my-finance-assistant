@@ -3,299 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>财务知识库智能助手</title>
+    <title>财务知识库智能助手 - 几何背景特效 V2</title>
     <style>
         :root {
-            --primary-color: #1a73e8;
-            --bg-color: #ffffff;
+            /* --- 原有颜色变量 --- */
+            --primary-color: #4a7ef0;
+            --primary-light: #6c8ef8;
+            --bg-color: #f7f9fc;
+            --card-bg: rgba(255, 255, 255, 0.85);
             --text-color: #333;
-            --card-bg: #f8f9fa;
-            --transition: all 0.3s ease;
+            --heading-color: #111;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow-color: rgba(108, 142, 248, 0.1);
+            --footer-text: #666;
+            --timeline-line: #d0d7e0;
+            --ai-glow-color: rgba(74, 126, 240, 0.3);
+            --scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+            --scrollbar-track-color: rgba(0, 0, 0, 0.05);
+
+            /* --- 新增：几何特效变量 --- */
+            --geo-line-color: rgba(0, 0, 0, 0.04); /* 主体背景线条颜色 */
+            --geo-container-start-color: rgba(74, 126, 240, 0.02); /* 容器特效起始色 */
+            --geo-container-end-color: rgba(74, 126, 240, 0.08); /* 容器特效结束色 */
+            --geo-body-opacity: 0.6;
+            --geo-container-opacity: 0.5;
+
+            --transition-fast: all 0.2s ease-in-out;
+            --transition-medium: all 0.4s ease-in-out;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
 
         [data-theme="dark"] {
+            /* --- 原有暗色变量 --- */
             --primary-color: #6c8ef8;
-            --bg-color: #0a0e1a;
-            --text-color: #e0e0e0;
-            --card-bg: #1a1f2d;
+            --primary-light: #8aaffd;
+            --bg-color: #0f141e;
+            --card-bg: rgba(26, 31, 45, 0.85);
+            --text-color: #c0c5d0;
+            --heading-color: #e0e6f1;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(108, 142, 248, 0.08);
+            --footer-text: #888;
+            --timeline-line: #3a4150;
+            --ai-glow-color: rgba(108, 142, 248, 0.3);
+            --scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+            --scrollbar-track-color: rgba(255, 255, 255, 0.05);
+
+             /* --- 新增：几何特效变量 (暗色) --- */
+            --geo-line-color: rgba(255, 255, 255, 0.03); /* 主体背景线条颜色 (暗) */
+            --geo-container-start-color: rgba(108, 142, 248, 0.02); /* 容器特效起始色 (暗) */
+            --geo-container-end-color: rgba(108, 142, 248, 0.06); /* 容器特效结束色 (暗) */
+            --geo-body-opacity: 0.4; /* 暗模式下更透明 */
+            --geo-container-opacity: 0.3; /* 暗模式下更透明 */
         }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-            color: var(--text-color);
-            background: var(--bg-color);
-            transition: var(--transition);
-            position: relative;
-            overflow-x: hidden;
+            /* --- 原有 body 样式 --- */
+            font-family: var(--font-family); max-width: 1000px; margin: 0 auto;
+            padding: 40px 20px; line-height: 1.7; color: var(--text-color);
+            background: var(--bg-color); transition: background-color var(--transition-medium), color var(--transition-medium);
+            position: relative; overflow-x: hidden; min-height: 100vh;
+            display: flex; flex-direction: column;
         }
 
-        /* 动态网格背景 */
+        /* 背景特效样式 (body::before, body::after) 不变 */
         body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light), var(--bg-color), var(--bg-color));
+            background-size: 400% 400%; opacity: 0.08;
+            z-index: -1; /* 在几何线条之下 */
+            animation: gradientBG 25s ease infinite; transition: background var(--transition-medium);
+        }
+        [data-theme="dark"] body::before {
+            background: linear-gradient(135deg, var(--bg-color), var(--bg-color), var(--primary-color), var(--primary-light));
+            opacity: 0.12;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        body::after {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image: 
-                linear-gradient(var(--primary-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--primary-color) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.05;
-            z-index: -1;
-            animation: gridMove 60s linear infinite;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background-image: repeating-linear-gradient( 45deg, var(--geo-line-color), var(--geo-line-color) 1px, transparent 1px, transparent 40px );
+            background-size: 100%;
+            opacity: var(--geo-body-opacity);
+            z-index: -2; /* 在最底层 */
+            animation: moveLines 40s linear infinite;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        @keyframes moveLines { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+
+
+        /* 容器背景特效样式 (.instructions::before, .knowledge-container::before, .theme-switch::before) 不变 */
+        .instructions, .knowledge-container, .theme-switch { position: relative; overflow: hidden; }
+        .instructions::before, .knowledge-container::before, .theme-switch::before {
+            content: ''; position: absolute; inset: 0;
+            background: conic-gradient( from 0deg, var(--geo-container-start-color), var(--geo-container-end-color), var(--geo-container-start-color) );
+            opacity: var(--geo-container-opacity); z-index: 0; border-radius: inherit;
+            animation: rotateGradient 20s linear infinite; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .knowledge-container::after { /* 保持原有的脉冲动画 */
+             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+             background-image: radial-gradient(circle, var(--ai-glow-color) 1px, transparent 1.5px);
+             background-size: 30px 30px; opacity: 0.3; z-index: 0;
+             animation: ai-pulse 15s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate; pointer-events: none;
+        }
+        @keyframes ai-pulse { 0% { opacity: 0.1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.05); } 100% { opacity: 0.1; transform: scale(1); } }
+        @keyframes rotateGradient { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+        /* 确保容器内内容在特效之上 (z-index) */
+        .instructions > *,
+        .knowledge-container .knowledge-title, /* 标题单独设置 */
+        .knowledge-container .knowledge-timeline, /* 时间线容器设置 */
+        .theme-switch > * {
+            position: relative; z-index: 1;
+        }
+        .knowledge-timeline > * { position: relative; z-index: 1; }
+
+        /* --- 页头样式恢复 --- */
+        header {
+            text-align: center; /* 恢复居中 */
+            margin-bottom: 40px; /* 调整间距 */
+            animation: fadeInDown 0.8s ease-out;
+            /* 确保 Header 本身也在特效之上（尽管它没有应用特效）*/
+             position: relative;
+             z-index: 1;
         }
 
-        @keyframes gridMove {
-            0% { transform: translate(0,0); }
-            100% { transform: translate(-30px,30px); }
-        }
-
-        /* 主题切换按钮 */
-        .theme-switch {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--card-bg);
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
+        /* 移除 AI Logo 样式 */
+        /* .ai-logo { ... } */
 
         h1 {
-            text-align: center;
-            background: linear-gradient(45deg, #1a73e8, #6c8ef8);
+            font-size: 2.6em; /* 恢复字体大小 */
+            font-weight: 700;
+            /* 恢复渐变文字效果 */
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
+            margin: 0 0 15px 0; /* 调整下边距 */
+            /* 移除 position relative 和 z-index，由父级 header 控制 */
         }
 
-        .knowledge-container {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
+        header p {
+            font-size: 1.05em; /* 恢复字体大小 */
+            color: var(--text-color);
+            opacity: 0.7;
+            margin: 0;
+            /* 移除 position relative 和 z-index，由父级 header 控制 */
         }
+        /* --- 页头样式恢复结束 --- */
 
-        .knowledge-container::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, 
-                transparent, 
-                rgba(108,142,248,0.1), 
-                transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* 鼠标跟随效果 */
-        .cursor-effect {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: 
-                width 0.3s ease,
-                height 0.3s ease,
-                opacity 0.3s ease;
-            z-index: 999;
-        }
-
-        /* 其他原有样式修改... */
-        /* 注意将所有颜色值替换为CSS变量 */
+        /* --- 其他样式保持不变 --- */
+        main { flex-grow: 1; }
+        .theme-switch { position: fixed; top: 25px; right: 25px; width: 44px; height: 44px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border-color); cursor: pointer; box-shadow: 0 4px 15px var(--shadow-color); display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); z-index: 1000; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .theme-switch:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 6px 20px var(--shadow-color); }
+        .theme-switch svg { width: 20px; height: 20px; fill: var(--primary-color); transition: var(--transition-fast); }
+        .theme-icon-light, .theme-icon-dark { display: none; }
+        [data-theme="dark"] .theme-icon-dark { display: block; }
+        [data-theme="light"] .theme-icon-light { display: block; }
+        html:not([data-theme="dark"]) .theme-icon-light { display: block; }
+        html[data-theme="dark"] .theme-icon-dark { display: block; }
+        .instructions { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px 30px; margin-bottom: 30px; box-shadow: 0 5px 25px var(--shadow-color); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); animation: fadeInUp 0.8s 0.2s ease-out backwards; }
+        .instructions h3 { color: var(--heading-color); font-size: 1.4em; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .instructions p { margin-bottom: 10px; }
+        .highlight-red { color: var(--primary-color); font-weight: 600; }
+        .chat-hint { background-color: rgba(var(--primary-color-rgb, 74, 126, 240), 0.1); padding: 10px 15px; border-radius: 8px; border-left: 3px solid var(--primary-color); margin-top: 15px; font-size: 0.95em; }
+        :root { --primary-color-rgb: 74, 126, 240; }
+        [data-theme="dark"] { --primary-color-rgb: 108, 142, 248; }
+        .knowledge-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px 30px; margin-top: 20px; box-shadow: 0 8px 30px var(--shadow-color); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); animation: fadeInUp 0.8s 0.4s ease-out backwards; }
+        .knowledge-title { color: var(--heading-color); text-align: center; font-size: 1.6em; margin-bottom: 20px; font-weight: 600; /* z-index 处理移至父级 */ }
+        .knowledge-timeline { max-height: 350px; overflow-y: auto; padding-right: 10px; margin-right: -10px; /* z-index 处理移至父级 */ scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); }
+        .knowledge-timeline::-webkit-scrollbar { width: 6px; }
+        .knowledge-timeline::-webkit-scrollbar-track { background: var(--scrollbar-track-color); border-radius: 3px; }
+        .knowledge-timeline::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb-color); border-radius: 3px; border: 1px solid var(--scrollbar-track-color); }
+        .knowledge-timeline::-webkit-scrollbar-thumb:hover { background-color: var(--primary-color); }
+        .knowledge-timeline .knowledge-record { background-color: transparent; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 15px; margin-bottom: 12px; position: relative; transition: var(--transition-fast); }
+        .knowledge-timeline .knowledge-record:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 4px 12px var(--shadow-color); border-color: var(--primary-color); box-shadow: 0 0 15px var(--ai-glow-color), 0 4px 12px var(--shadow-color); }
+        .knowledge-timeline .record-date { font-weight: 600; color: var(--primary-color); margin-bottom: 6px; font-size: 0.95em; }
+        .knowledge-timeline .record-content { font-size: 0.88em; color: var(--text-color); margin-bottom: 4px; padding-left: 12px; position: relative; line-height: 1.5; }
+        .knowledge-timeline .record-content::before { content: '•'; position: absolute; left: 0; color: var(--primary-light); font-size: 1.1em; line-height: 1.5; top: 0; }
+        footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); color: var(--footer-text); font-size: 0.9em; animation: fadeInUp 0.8s 0.6s ease-out backwards; }
+        footer p { opacity: 0.8; }
+        .cursor-effect { position: fixed; width: 10px; height: 10px; border: 1px solid var(--primary-color); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%) scale(1); transition: width 0.2s ease, height 0.2s ease, opacity 0.3s ease, transform 0.2s ease, background-color 0.2s ease; z-index: 9999; opacity: 0.6; backdrop-filter: invert(1) grayscale(1); }
+        .cursor-effect.active { transform: translate(-50%, -50%) scale(2.5); background-color: rgba(var(--primary-color-rgb), 0.2); opacity: 0.8; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { body { padding: 30px 15px; } h1 { font-size: 2.2em; } body::after { background-image: repeating-linear-gradient(45deg, var(--geo-line-color), var(--geo-line-color) 1px, transparent 1px, transparent 60px); } @keyframes moveLines { 100% { background-position: 60px 60px; } } /*.ai-logo { width: 30px; height: 30px; }*/ header { margin-bottom: 30px; } .instructions, .knowledge-container { padding: 20px; } .knowledge-title { font-size: 1.5em; } .knowledge-timeline { max-height: 300px; } .knowledge-timeline .record-date { font-size: 0.9em; } .knowledge-timeline .record-content { font-size: 0.85em; line-height: 1.45; } .theme-switch { top: 15px; right: 15px; width: 40px; height: 40px; } .theme-switch svg { width: 18px; height: 18px; } }
+        @media (max-width: 480px) { h1 { font-size: 1.9em; } body::after { background-image: repeating-linear-gradient(45deg, var(--geo-line-color), var(--geo-line-color) 1px, transparent 1px, transparent 80px); } @keyframes moveLines { 100% { background-position: 80px 80px; } } .knowledge-title { font-size: 1.3em; } .knowledge-timeline { max-height: 250px; } .knowledge-timeline .record-date { font-size: 0.85em; } .knowledge-timeline .record-content { font-size: 0.8em; line-height: 1.4; } }
     </style>
 </head>
-<body>
+<body data-theme="light">
+
     <!-- 主题切换按钮 -->
-    <div class="theme-switch" onclick="toggleTheme()">
-        <span class="theme-icon">🌓</span>
+    <div class="theme-switch" onclick="toggleTheme()" title="切换主题">
+        <!-- Sun/Moon Icons -->
+        <svg class="theme-icon-light" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 011.06.044l1.5 1.5a.75.75 0 01-1.06 1.06l-1.5-1.5a.75.75 0 01.044-1.06zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM18.894 17.894a.75.75 0 01.044 1.06l-1.5 1.5a.75.75 0 01-1.06-1.06l1.5-1.5a.75.75 0 011.016-.044zM12 18.75a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18.75zM5.106 17.894a.75.75 0 011.016.044l1.5 1.5a.75.75 0 11-1.06 1.06l-1.5-1.5a.75.75 0 01.044-1.06zM2.25 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3a.75.75 0 01-.75-.75zM5.106 6.106a.75.75 0 01.044-1.06l1.5-1.5a.75.75 0 011.06 1.06l-1.5 1.5a.75.75 0 01-1.06-.044z"></path></svg>
+        <svg class="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-3.51 1.71-6.636 4.43-8.561a.75.75 0 01.818.162z" clip-rule="evenodd"></path></svg>
     </div>
 
-    <!-- 鼠标跟随元素 -->
+    <!-- 鼠标跟随效果元素 -->
     <div class="cursor-effect"></div>
 
-    <!-- 原有内容保持不变... -->
+    <!-- 修改：恢复 Header 结构 -->
+    <header>
+        <h1>财务知识库智能助手</h1>
+        <p>即时解答您的财务疑问，提升工作效率</p>
+    </header>
 
-    <script>
-        // 主题切换功能
-        function toggleTheme() {
-            const body = document.body;
-            body.style.transition = 'none'; // 禁用过渡避免闪烁
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            body.setAttribute('data-theme', isDark ? '' : 'dark');
-            
-            // 保存用户偏好
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-            
-            // 更新按钮图标
-            document.querySelector('.theme-icon').textContent = isDark ? '🌞' : '🌙';
-        }
+    <main>
+        <!-- 说明区域 -->
+        <div class="instructions">
+            <h3>使用说明</h3>
+            <p>本助手已集成以下财务知识模块，您可以直接在<strong class="highlight-red">右下角聊天窗口</strong>咨询相关问题。</p>
+            <p class="chat-hint">💡 <strong class="highlight-red">点击右下角聊天图标</strong> 即可开始与智能助手对话！</p>
+        </div>
 
-        // 鼠标跟随效果
-        document.addEventListener('mousemove', (e) => {
-            const cursor = document.querySelector('.cursor-effect');
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
-            
-            // 在可交互元素上放大光标
-            const target = e.target;
-            if (target.closest('button, a, .knowledge-record')) {
-                cursor.style.width = '30px';
-                cursor.style.height = '30px';
-                cursor.style.opacity = '0.8';
-            } else {
-                cursor.style.width = '20px';
-                cursor.style.height = '20px';
-                cursor.style.opacity = '0.5';
-            }
-        });
-
-        // 初始化主题
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme === 'dark' ? 'dark' : '');
-            document.querySelector('.theme-icon').textContent = savedTheme === 'dark' ? '🌙' : '🌞';
-        }
-        initTheme();
-
-       
-    </script>
-    </style>
-</head>
-<body>
-    <h1>财务知识库智能助手</h1>
-    
-    <div class="instructions">
-        <h3>使用说明：</h3>
-        <p>本助手已集成以下财务知识模块，您可以直接在<strong class="highlight-red">右下角聊天窗口</strong>咨询相关问题。</p>
-        <p class="chat-hint"><strong class="highlight-red">※ 点击右下角章鱼图标打开会话窗口进行咨询 ※</strong></p>
-    </div>
-    
-     <div class="knowledge-container">
-        <h2 class="knowledge-title">知识库更新记录</h2>
-        <div class="knowledge-timeline">
-            <div class="knowledge-record">
-                <div class="record-date">2025年4月第二次更新</div>
-                <div class="record-content">总账类FAQ</div>
-                <div class="record-content">资金结算操作FAQ</div>
-                <div class="record-content">业务招待费报销FAQ</div>
-                <div class="record-content">商务宴请集团制度</div>
-                <div class="record-content">人员差旅标准集团制度</div>
-            </div> <div class="knowledge-record">
-                <div class="record-date">2025年4月</div>
-                <div class="record-content">经办人填单模块 FAQ</div>
-                <div class="record-content">本地会计岗人员模块 FAQ</div>
-                <div class="record-content">本地资金岗人员模块 FAQ</div>
-                <div class="record-content">财务共享中心会计凭证 FAQ</div>
-                <div class="record-content">财务共享中心流水认领 FAQ</div>
-            </div>
-            <div class="knowledge-record">
-                <div class="record-date">2025年2月</div>
-                <div class="record-content">冲销借款或者预付款 FAQ</div>
-                <div class="record-content">智能稽核及智能审核 FAQ</div>
-                <div class="record-content">业务招待费报销业务 FAQ</div>
-                <div class="record-content">出差申请变更 FAQ</div>
-                <div class="record-content">费控板块单据查询 FAQ</div>
-                <div class="record-content">财务共享费控共享 FAQ</div>
-                            </div>
-            <div class="knowledge-record">
-                <div class="record-date">2024年11月</div>
-                <div class="record-content">费控板块常见 FAQ(持续维护)</div>
+        <!-- 知识库区域 -->
+        <div class="knowledge-container">
+            <h2 class="knowledge-title">知识库更新动态</h2>
+            <div class="knowledge-timeline">
+                <!-- 更新记录 -->
+                <article class="knowledge-record">
+                    <div class="record-date">2025年4月第二次更新</div>
+                    <div class="record-content">总账类FAQ</div>
+                    <div class="record-content">资金结算操作FAQ</div>
+                    <div class="record-content">业务招待费报销FAQ</div>
+                    <div class="record-content">商务宴请集团制度</div>
+                    <div class="record-content">人员差旅标准集团制度</div>
+                </article>
+                 <article class="knowledge-record">
+                    <div class="record-date">2025年4月</div>
+                    <div class="record-content">经办人填单模块 FAQ</div>
+                    <div class="record-content">本地会计岗人员模块 FAQ</div>
+                    <div class="record-content">本地资金岗人员模块 FAQ</div>
+                    <div class="record-content">财务共享中心会计凭证 FAQ</div>
+                    <div class="record-content">财务共享中心流水认领 FAQ</div>
+                </article>
+                <article class="knowledge-record">
+                    <div class="record-date">2025年2月</div>
+                    <div class="record-content">冲销借款或者预付款 FAQ</div>
+                    <div class="record-content">智能稽核及智能审核 FAQ</div>
+                    <div class="record-content">业务招待费报销业务 FAQ</div>
+                    <div class="record-content">出差申请变更 FAQ</div>
+                    <div class="record-content">费控板块单据查询 FAQ</div>
+                    <div class="record-content">财务共享费控共享 FAQ</div>
+                </article>
+                <article class="knowledge-record">
+                    <div class="record-date">2024年11月</div>
+                    <div class="record-content">费控板块常见 FAQ (持续维护)</div>
+                </article>
+                <article class="knowledge-record">
+                    <div class="record-date">2024年10月</div>
+                    <div class="record-content">新增固定资产相关流程</div>
+                    <div class="record-content">发票校验规则更新</div>
+                </article>
+                <article class="knowledge-record">
+                    <div class="record-date">2024年9月</div>
+                    <div class="record-content">月度结账注意事项</div>
+                    <div class="record-content">供应商信息维护指南</div>
+                </article>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- 加载 SDK -->
+    <footer>
+        <p>© 2025 成都兴城财务知识智能助手 | 技术支持：成都智慧城市 张潇</p>
+    </footer>
+
+    <!-- 加载 Coze SDK -->
     <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.3/libs/cn/index.js"></script>
 
     <script>
-        let cozeWebSDK;
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            cozeWebSDK = new CozeWebSDK.WebChatClient({
-                config: {
-                    type: 'bot',
-                     bot_id: '7446466446168883238',
-                    isIframe: false,
-                },
-                auth: {
-                    type: 'token',
-                    token: 'pat_c97Uyt4bCIXwpvR9h3dFLZ1vIoCl7AltPtezKPgGiiciedmBBPMzJhusSP1ei491',
-                    onRefreshToken: async () => {
-                        const newToken = await fetchNewToken();
-                        return newToken;
-                    },
-                },
-                style: {
-                    position: 'right',
-                    width: '400px',
-                    height: '600px',
-                    headerBackground: '#1a73e8',
-                    headerColor: '#ffffff',
-                },
-            });
-
-            // 监听事件
-            cozeWebSDK.on('message_sent', (message) => {
-                console.log('用户发送:', message);
-            });
-            cozeWebSDK.on('message_received', (message) => {
-                console.log('收到回复:', message);
-            });
-
-            // 模拟获取新token
-            async function fetchNewToken() {
-                console.log('正在刷新token...');
-                return '新token_' + Math.random().toString(36).slice(2, 10);
-            }
-        });
-
-        // 点击FAQ项触发的问题询问函数
-        function askQuestion(question) {
-            if (!cozeWebSDK) {
-                console.error('聊天SDK尚未初始化');
-                return;
-            }
-            
-            // 打开聊天窗口
-            cozeWebSDK.open();
-            
-            // 延迟发送消息，确保窗口已打开
-            setTimeout(() => {
-                cozeWebSDK.sendMessage(question);
-            }, 500);
-        }
+        // --- JavaScript (保持不变) ---
+         let cozeWebSDK; const body = document.body; const themeSwitch = document.querySelector('.theme-switch'); const lightIcon = document.querySelector('.theme-icon-light'); const darkIcon = document.querySelector('.theme-icon-dark'); const cursorEffect = document.querySelector('.cursor-effect');
+         function applyTheme(theme) { body.setAttribute('data-theme', theme); localStorage.setItem('theme', theme); lightIcon.style.display = theme === 'light' ? 'block' : 'none'; darkIcon.style.display = theme === 'dark' ? 'block' : 'none'; console.log(`主题已切换为: ${theme}`); }
+         function toggleTheme() { const currentTheme = body.getAttribute('data-theme') || 'light'; applyTheme(currentTheme === 'light' ? 'dark' : 'light'); }
+         function initTheme() { const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; const savedTheme = localStorage.getItem('theme'); const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light'); lightIcon.style.display = 'none'; darkIcon.style.display = 'none'; applyTheme(initialTheme); window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => { if (!localStorage.getItem('theme')) { applyTheme(event.matches ? 'dark' : 'light'); } }); console.log(`初始化主题: ${initialTheme}`); }
+         document.addEventListener('mousemove', (e) => { if (!cursorEffect) return; cursorEffect.style.left = `${e.clientX}px`; cursorEffect.style.top = `${e.clientY}px`; const target = e.target; const interactive = target.closest('button, a, .theme-switch, .knowledge-timeline .knowledge-record'); cursorEffect.classList.toggle('active', !!interactive); });
+         document.addEventListener('mouseleave', () => { if (cursorEffect) cursorEffect.style.opacity = '0'; }); document.addEventListener('mouseenter', () => { if (cursorEffect) cursorEffect.style.opacity = '0.6'; });
+         document.addEventListener('DOMContentLoaded', function() { initTheme(); cozeWebSDK = new CozeWebSDK.WebChatClient({ config: { type: 'bot', bot_id: '7446466446168883238', isIframe: false }, auth: { type: 'token', token: 'pat_c97Uyt4bCIXwpvR9h3dFLZ1vIoCl7AltPtezKPgGiiciedmBBPMzJhusSP1ei491', onRefreshToken: async () => '模拟新Token_' + Date.now() }, style: { position: 'right', width: '400px', height: '600px', headerBackground: 'var(--primary-color)', headerColor: '#ffffff' }, }); cozeWebSDK.on('message_sent', (message) => { console.log('用户发送:', message); }); cozeWebSDK.on('message_received', (message) => { console.log('收到回复:', message); }); console.log('Coze Web SDK 初始化完成'); });
+         function askQuestion(question) { if (!cozeWebSDK) { console.error('聊天 SDK 尚未初始化。'); alert('聊天助手尚未准备好，请稍后再试。'); return; } try { cozeWebSDK.open(); setTimeout(() => { cozeWebSDK.sendMessage(question); console.log('已将问题发送至 Coze:', question); }, 300); } catch (error) { console.error('通过 Coze SDK 发送消息时出错:', error); alert('无法发送消息，请检查控制台获取更多信息。'); } }
     </script>
-     <div class="footer">
-        <p>© 2025 成都兴城财务知识智能助手 | 作者：张潇</p>
-    </div>
-</body>
 
+</body>
 </html>
+--- END OF FILE code (4).html ---
