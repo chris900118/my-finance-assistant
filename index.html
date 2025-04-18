@@ -279,17 +279,26 @@
     <!-- 加载 Coze SDK -->
     <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.3/libs/cn/index.js"></script>
 
-    <script>
-        // --- JavaScript (保持不变) ---
-         let cozeWebSDK; const body = document.body; const themeSwitch = document.querySelector('.theme-switch'); const lightIcon = document.querySelector('.theme-icon-light'); const darkIcon = document.querySelector('.theme-icon-dark'); const cursorEffect = document.querySelector('.cursor-effect');
-         function applyTheme(theme) { body.setAttribute('data-theme', theme); localStorage.setItem('theme', theme); lightIcon.style.display = theme === 'light' ? 'block' : 'none'; darkIcon.style.display = theme === 'dark' ? 'block' : 'none'; console.log(`主题已切换为: ${theme}`); }
-         function toggleTheme() { const currentTheme = body.getAttribute('data-theme') || 'light'; applyTheme(currentTheme === 'light' ? 'dark' : 'light'); }
-         function initTheme() { const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; const savedTheme = localStorage.getItem('theme'); const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light'); lightIcon.style.display = 'none'; darkIcon.style.display = 'none'; applyTheme(initialTheme); window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => { if (!localStorage.getItem('theme')) { applyTheme(event.matches ? 'dark' : 'light'); } }); console.log(`初始化主题: ${initialTheme}`); }
-         document.addEventListener('mousemove', (e) => { if (!cursorEffect) return; cursorEffect.style.left = `${e.clientX}px`; cursorEffect.style.top = `${e.clientY}px`; const target = e.target; const interactive = target.closest('button, a, .theme-switch, .knowledge-timeline .knowledge-record'); cursorEffect.classList.toggle('active', !!interactive); });
-         document.addEventListener('mouseleave', () => { if (cursorEffect) cursorEffect.style.opacity = '0'; }); document.addEventListener('mouseenter', () => { if (cursorEffect) cursorEffect.style.opacity = '0.6'; });
-         document.addEventListener('DOMContentLoaded', function() { initTheme(); cozeWebSDK = new CozeWebSDK.WebChatClient({ config: { type: 'bot', bot_id: '7446466446168883238', isIframe: false }, auth: { type: 'token', token: 'pat_c97Uyt4bCIXwpvR9h3dFLZ1vIoCl7AltPtezKPgGiiciedmBBPMzJhusSP1ei491', onRefreshToken: async () => '模拟新Token_' + Date.now() }, style: { position: 'right', width: '400px', height: '600px', headerBackground: 'var(--primary-color)', headerColor: '#ffffff' }, }); cozeWebSDK.on('message_sent', (message) => { console.log('用户发送:', message); }); cozeWebSDK.on('message_received', (message) => { console.log('收到回复:', message); }); console.log('Coze Web SDK 初始化完成'); });
-         function askQuestion(question) { if (!cozeWebSDK) { console.error('聊天 SDK 尚未初始化。'); alert('聊天助手尚未准备好，请稍后再试。'); return; } try { cozeWebSDK.open(); setTimeout(() => { cozeWebSDK.sendMessage(question); console.log('已将问题发送至 Coze:', question); }, 300); } catch (error) { console.error('通过 Coze SDK 发送消息时出错:', error); alert('无法发送消息，请检查控制台获取更多信息。'); } }
-    </script>
+  
+    
+<script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/cn/index.js"></script>
+<script>
+  new CozeWebSDK.WebChatClient({
+    config: {
+      bot_id: '7446466446168883238',
+    },
+    componentProps: {
+      title: 'Coze',
+    },
+    auth: {
+      type: 'token',
+      token: 'pat_c97Uyt4bCIXwpvR9h3dFLZ1vIoCl7AltPtezKPgGiiciedmBBPMzJhusSP1ei491',
+      onRefreshToken: function () {
+        return 'pat_c97Uyt4bCIXwpvR9h3dFLZ1vIoCl7AltPtezKPgGiiciedmBBPMzJhusSP1ei491'
+      }
+    }
+  });
+</script>
 
 </body>
 </html>
